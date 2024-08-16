@@ -1,0 +1,32 @@
+{
+  "name": "spendwise",
+  "version": "1.0.0",
+  "description": "An expense tracking app to help you budget.",
+  "main": "index.js",
+  "scripts": {
+    "test": "'echo \"Error: no test specified\" && exit 1'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sand-raM/Last-Portfolio.git"
+  },
+  "keywords": [
+    "Last",
+    "Portfolio"
+  ],
+  "author": "Sand-raM",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sand-raM/Last-Portfolio/issues"
+  },
+  "homepage": "https://github.com/Sand-raM/Last-Portfolio#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.5.3"
+  }
+}
