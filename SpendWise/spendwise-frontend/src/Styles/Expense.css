@@ -1,0 +1,55 @@
+.expense {
+  max-width: 800px;
+  margin: 40px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.expense h2 {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.expense ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.expense li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+
+.expense li:hover {
+  background-color: #f5f5f5;
+}
+
+.expense button {
+  background-color: #4CAF50;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.expense button:hover {
+  background-color: #3e8e41;
+}
+
+.error-message {
+  color: red;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
