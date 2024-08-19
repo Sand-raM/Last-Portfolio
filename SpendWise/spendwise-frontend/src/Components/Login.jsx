@@ -19,7 +19,7 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const response = await axios.post('http://localhost:3000/login', { email, password });
+      const response = await axios.post('https://sandra-portfolio.onrender.com/login', { email, password });
       localStorage.setItem('token', response.data.token);
       setError(null);
       setIsLoading(false);
