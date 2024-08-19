@@ -12,10 +12,10 @@ const Dashboard = () => {
     const fetchUserData = async () => {
       try {
         const token = localStorage.getItem('token');
-        const userResponse = await axios.get('http://localhost:3000/users/me', {
+        const userResponse = await axios.get('https://sandra-portfolio.onrender.com/users/me', {
           headers: { Authorization: `Bearer ${token}` }
         });
-        const expenseResponse = await axios.get('http://localhost:3000/expenses', {
+        const expenseResponse = await axios.get('https://sandra-portfolio.onrender.com/expenses', {
           headers: { Authorization: `Bearer ${token}` }
         });
         setUserData(userResponse.data);
