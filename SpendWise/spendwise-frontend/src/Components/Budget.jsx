@@ -14,7 +14,7 @@ const Budget = () => {
 
   const fetchBudgetData = async () => {
     try {
-      const response = await axios.get('/api/budgets');
+      const response = await axios.get('https://sandra-portfolio.onrender.com/budgets');
       setBudget(response.data.budget);
       setTarget(response.data.target);
       setSpent(response.data.spent);
