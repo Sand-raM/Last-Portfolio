@@ -27,7 +27,7 @@ const Budget = () => {
   const handleUpdateBudget = async (event) => {
     event.preventDefault();
     try {
-      await axios.put('/api/budgets', { target });
+      await axios.put('https://sandra-portfolio.onrender.com/budgets', { target });
       fetchBudgetData(); // Refresh budget data after update
     } catch (error) {
       setError('Error updating budget target.');
