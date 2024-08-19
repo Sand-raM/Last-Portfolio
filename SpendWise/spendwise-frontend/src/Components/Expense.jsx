@@ -13,7 +13,7 @@ const Expense = () => {
 
   const fetchExpenses = async () => {
     try {
-      const response = await axios.get('/api/expenses');
+      const response = await axios.get('https://sandra-portfolio.onrender.com/expenses');
       setExpenses(response.data);
     } catch (error) {
       console.error(error);
@@ -23,7 +23,7 @@ const Expense = () => {
   const handleAddExpense = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('/api/expenses', newExpense);
+      const response = await axios.post('https://sandra-portfolio.onrender.com/expenses', newExpense);
       setExpenses([...expenses, response.data]);
       setNewExpense({ name: '', amount: 0 });
     } catch (error) {
@@ -39,7 +39,7 @@ const Expense = () => {
   const handleUpdateExpense = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.put(`/api/expenses/${editedExpense.id}`, editedExpense);
+      const response = await axios.put(`https://sandra-portfolio.onrender.com/expenses/${editedExpense.id}`, editedExpense);
       const updatedExpenses = expenses.map((expense) => {
         if (expense.id === editedExpense.id) {
           return editedExpense;
@@ -55,7 +55,7 @@ const Expense = () => {
 
   const handleDeleteExpense = async (expense) => {
     try {
-      await axios.delete(`/api/expenses/${expense.id}`);
+      await axios.delete(`https://sandra-portfolio.onrender.com/expenses/${expense.id}`);
       const updatedExpenses = expenses.filter((e) => e.id !== expense.id);
       setExpenses(updatedExpenses);
     } catch (error) {
