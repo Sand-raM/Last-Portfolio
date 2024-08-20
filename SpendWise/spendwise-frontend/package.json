@@ -24,7 +24,7 @@
     "eject": "react-scripts eject",
     "start:prod": "serve -s build"
   },
-  "proxy": "http://localhost:3001",
+  "proxy": "https://sandra-portfolio.onrender.com",
   "eslintConfig": {
     "extends": [
       "react-app",
