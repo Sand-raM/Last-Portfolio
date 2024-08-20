@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import '../Styles/Expense.css'; // Importing the CSS file
 
 const Expense = () => {
   const [expenses, setExpenses] = useState([]);
@@ -13,8 +14,8 @@ const Expense = () => {
 
   const fetchExpenses = async () => {
     try {
-      const response = await axios.get('https://sandra-portfolio.onrender.com/expenses');
-      setExpenses(response.data);
+      const { data: expenseData } = await axios.get('https://sandra-portfolio.onrender.com/expenses');
+      setExpenses(expenseData);
     } catch (error) {
       console.error(error);
     }
@@ -23,8 +24,8 @@ const Expense = () => {
   const handleAddExpense = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.post('https://sandra-portfolio.onrender.com/expenses', newExpense);
-      setExpenses([...expenses, response.data]);
+      const { data: newExpenseData } = await axios.post('https://sandra-portfolio.onrender.com/expenses', newExpense);
+      setExpenses([...expenses, newExpenseData]);
       setNewExpense({ name: '', amount: 0 });
     } catch (error) {
       console.error(error);
@@ -39,10 +40,10 @@ const Expense = () => {
   const handleUpdateExpense = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.put(`https://sandra-portfolio.onrender.com/expenses/${editedExpense.id}`, editedExpense);
+      const { data: updatedExpenseData } = await axios.put(`https://sandra-portfolio.onrender.com/expenses/${editedExpense.id}`, editedExpense);
       const updatedExpenses = expenses.map((expense) => {
         if (expense.id === editedExpense.id) {
-          return editedExpense;
+          return updatedExpenseData;
         }
         return expense;
       });

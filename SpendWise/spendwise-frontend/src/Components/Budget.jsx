@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './styles/Budget.css'; // Import the CSS file
+import '../Styles/Budget.css'; // Import the CSS file
 
 const Budget = () => {
   const [budget, setBudget] = useState(0);

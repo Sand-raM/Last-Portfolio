@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import './styles/Dashboard.css'; // Import from Styles
+import '../Styles/Dashboard.css'; // Import from Styles
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
