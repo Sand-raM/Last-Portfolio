@@ -2,9 +2,11 @@ require('dotenv').config();
 
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
 
 const app = express();
 console.log('Secret Key:', process.env.SECRET_KEY);
+app.use(cors());
 
 // Connecting to MongoDB using environment variable
 mongoose.connect(process.env.MONGO_URI)
@@ -15,8 +17,8 @@ mongoose.connect(process.env.MONGO_URI)
 app.use(express.json());
 
 // Routes
-app.use('/budgets', require('./routes/budgetRoutes'));
-app.use('/expenses', require('./routes/expenseRoute'));
+app.use('/budgets', require('./routes/BudgetRoutes'));
+app.use('/expenses', require('./routes/ExpenseRoute'));
 app.use('/users', require('./routes/UserRoute'));
 app.use('/', require('./routes/LoginRoute'));
 

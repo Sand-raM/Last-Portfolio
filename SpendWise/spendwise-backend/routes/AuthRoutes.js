@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { db } = require('../db'); // Import the database connection
-const User = require('../models/User'); // Import the User model
+const User = require('../models/user'); // Import the User model
 
 router.post('/login', async (req, res) => {
   try {
