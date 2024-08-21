@@ -22,6 +22,15 @@ app.use('/expenses', require('./routes/ExpenseRoute'));
 app.use('/users', require('./routes/UserRoute'));
 app.use('/', require('./routes/LoginRoute'));
 
+// Custom message for the root route (/)
+app.get('/', (req, res) => {
+  res.send(`
+    <h1>Welcome to SpendWise!</h1>
+    <p>This is a custom message or page.</p>
+    <p>Use the navigation menu to access budgets, expenses, and user management.</p>
+  `);
+});
+
 // Test route to verify server is setup
 app.get('/test', (req, res) => {
     res.send('Welcome to SpendWise, your budget friend!');
