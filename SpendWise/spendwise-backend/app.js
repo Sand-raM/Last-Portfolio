@@ -9,7 +9,7 @@ console.log('Secret Key:', process.env.SECRET_KEY);
 app.use(cors());
 
 // Connecting to MongoDB using environment variable
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, {dbName:"SpendWise"})
   .then(() => console.log('Connected to MongoDB'))
   .catch(error => console.error('Error connecting to MongoDB:', error));
 
