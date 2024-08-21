@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: spendwise-backend
+    env: node
+    region: oregon
+    buildCommand: npm install
+    startCommand: node app.js
+    envVars:
+      - key: MONGO_URI
+        value: mongodb+srv://umuraza:otbayeGfKdXKQRvf@cluster0.xt6ok5t.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
+      - key: SECRET_KEY
+        value: your_secret_key_here
+    port: 3000
