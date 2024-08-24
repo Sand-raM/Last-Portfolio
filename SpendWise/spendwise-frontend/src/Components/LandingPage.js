@@ -1,6 +1,6 @@
 import React from 'react';
 import '../Styles/LandingPage.css';
-import landingPageImage from './landing-page-image.jpg'; // Replace with the actual image path
+import landingPageImage from '../../SpendWise.jpeg';
 
 const LandingPage = () => {
   return (
