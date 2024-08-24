@@ -1,11 +1,11 @@
 import React from 'react';
 import '../Styles/LandingPage.css';
-import landingPageImage from '../../SpendWise.jpeg';
+import landingPageImage from '../assets/SpendWise.jpeg';
 
 const LandingPage = () => {
   return (
     <div className="landing-page">
-      <img src={landingPageImage} alt="Person using SpendWise app" className="landing-page-image" />
+      <img src="/SpendWise.jpeg" alt="Person using SpendWise app" className="landing-page-image" />
       <div className="landing-page-content">
         <h1>Welcome to SpendWise</h1>
         <p>
