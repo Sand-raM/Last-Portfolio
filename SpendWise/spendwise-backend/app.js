@@ -5,7 +5,14 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:3001',
+  credentials: true
+}));
+
 console.log('Secret Key:', process.env.SECRET_KEY);
+console.log('MONGO_URI:', process.env.MONGO_URI);
 app.use(cors());
 
 // Connecting to MongoDB using environment variable
@@ -33,6 +40,7 @@ app.get('/', (req, res) => {
 
 // Test route to verify server is setup
 app.get('/test', (req, res) => {
+
     res.send('Welcome to SpendWise, your budget friend!');
 });
 
