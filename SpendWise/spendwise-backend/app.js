@@ -7,7 +7,7 @@ const cors = require('cors');
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:3001',
+  origin: ['https://sandra-front.onrender.com', 'http://localhost:3001'],
   credentials: true
 }));
 
