@@ -3,20 +3,22 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const authMiddleware = require('./middleware/AuthMiddleware');
 
 const app = express();
 
+// CORS setup
 app.use(cors({
   origin: ['https://sandra-front.onrender.com', 'http://localhost:3001'],
   credentials: true
 }));
 
+// Environment variables
 console.log('Secret Key:', process.env.SECRET_KEY);
 console.log('MONGO_URI:', process.env.MONGO_URI);
-app.use(cors());
 
-// Connecting to MongoDB using environment variable
-mongoose.connect(process.env.MONGO_URI, {dbName:"SpendWise"})
+// MongoDB connection
+mongoose.connect(process.env.MONGO_URI, { dbName: "SpendWise" })
   .then(() => console.log('Connected to MongoDB'))
   .catch(error => console.error('Error connecting to MongoDB:', error));
 
@@ -24,12 +26,20 @@ mongoose.connect(process.env.MONGO_URI, {dbName:"SpendWise"})
 app.use(express.json());
 
 // Routes
-app.use('/budgets', require('./routes/BudgetRoutes'));
-app.use('/expenses', require('./routes/ExpenseRoute'));
-app.use('/users', require('./routes/UserRoute'));
-app.use('/', require('./routes/LoginRoute'));
+const routes = {
+  budgets: require('./routes/BudgetRoutes'),
+  expenses: require('./routes/ExpenseRoute'),
+  users: require('./routes/UserRoute'),
+  login: require('./routes/LoginRoute')
+};
 
-// Custom message for the root route (/)
+// Applying AuthMiddleware to routes that require authentication
+app.use('/budgets', authMiddleware, routes.budgets);
+app.use('/expenses', authMiddleware, routes.expenses);
+app.use('/users', authMiddleware, routes.users);
+app.use('/', routes.login);
+
+// Custom root route
 app.get('/', (req, res) => {
   res.send(`
     <h1>Welcome to SpendWise!</h1>
@@ -38,25 +48,26 @@ app.get('/', (req, res) => {
   `);
 });
 
-// Test route to verify server is setup
+// Test route
 app.get('/test', (req, res) => {
-
-    res.send('Welcome to SpendWise, your budget friend!');
+  res.send('Welcome to SpendWise, your budget friend!');
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error(err);
-    res.status(500).json({ error: 'Internal Server Error' });
+  console.error(err);
+  res.status(500).json({ error: 'Internal Server Error' });
 });
 
-app.listen(process.env.PORT || 3000, () => {
-    console.log(`Server listening on port ${process.env.PORT || 3000}`);
+// Server startup
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server listening on port ${PORT}`);
 });
 
 // Graceful shutdown
 process.on('SIGINT', async () => {
-    await mongoose.connection.close();
-    console.log('Disconnected from MongoDB');
-    process.exit(0);
+  await mongoose.connection.close();
+  console.log('Disconnected from MongoDB');
+  process.exit(0);
 });
