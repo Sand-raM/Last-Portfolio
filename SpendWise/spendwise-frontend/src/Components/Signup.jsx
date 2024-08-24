@@ -32,7 +32,7 @@ const Signup = () => {
     setIsLoading(true); // Set loading state to true
 
     try {
-      const response = await axios.post('https://sandra-portfolio.onrender.com/users', {
+      const response = await axios.post('https://sandra-portfolio.onrender.com/users/register', {
         name,
         email,
         password,
