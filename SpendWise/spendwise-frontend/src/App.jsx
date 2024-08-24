@@ -7,18 +7,19 @@ import Budget from './Components/Budget';
 import Expense from './Components/Expense';
 import Login from './Components/Login';
 import Signup from './Components/Signup';
+import LandingPage from './Components/LandingPage';
 
 function App() {
   return (
     <BrowserRouter>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/budget" element={<Budget />} />
         <Route path="/expenses" element={<Expense />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="*" element={<Login />} /> {/* default route */}
       </Routes>
     </BrowserRouter>
   );
