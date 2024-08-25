@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api'; // Import the custom Axios instance
 import '../Styles/Expense.css';
-
-const API_ENDPOINT = 'https://sandra-portfolio.onrender.com/expenses';
 
 const Expense = () => {
   const [expenses, setExpenses] = useState([]);
@@ -10,30 +8,36 @@ const Expense = () => {
   const [editing, setEditing] = useState(false);
   const [editedExpense, setEditedExpense] = useState({});
   const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(true); // Add a loading state variable
 
   useEffect(() => {
     fetchExpenses();
   }, []);
 
   const fetchExpenses = async () => {
+    setIsLoading(true); // Set loading to true
     try {
-      const { data: expenseData } = await axios.get(API_ENDPOINT);
+      const { data: expenseData } = await api.get('/expenses'); // Use the api instance
       setExpenses(expenseData);
     } catch (error) {
       setError('Error fetching expenses. Please try again later.');
-      console.error(error);
+      console.error('Fetch error:', error);
+      // Log error to logging service or analytics platform
+    } finally {
+      setIsLoading(false); // Set loading to false
     }
   };
 
   const handleAddExpense = async (event) => {
     event.preventDefault();
     try {
-      const { data: newExpenseData } = await axios.post(API_ENDPOINT, newExpense);
+      const { data: newExpenseData } = await api.post('/expenses', newExpense); // Use the api instance
       setExpenses([...expenses, newExpenseData]);
       setNewExpense({ name: '', amount: 0 });
     } catch (error) {
       setError('Error adding expense. Please try again later.');
-      console.error(error);
+      console.error('Add error:', error);
+      // Log error to logging service or analytics platform
     }
   };
 
@@ -45,43 +49,42 @@ const Expense = () => {
   const handleUpdateExpense = async (event) => {
     event.preventDefault();
     try {
-      const { data: updatedExpenseData } = await axios.put(`${API_ENDPOINT}/${editedExpense.id}`, editedExpense);
+      const { data: updatedExpenseData } = await api.put(`/expenses/${editedExpense._id}`, editedExpense); // Use the api instance
       const updatedExpenses = expenses.map((expense) =>
-        expense.id === editedExpense.id ? updatedExpenseData : expense
+        expense._id === editedExpense._id ? updatedExpenseData : expense
       );
       setExpenses(updatedExpenses);
       setEditing(false);
       setEditedExpense({});
     } catch (error) {
       setError('Error updating expense. Please try again later.');
-      console.error(error);
+      console.error('Update error:', error);
+      // Log error to logging service or analytics platform
     }
   };
 
   const handleDeleteExpense = async (expense) => {
     try {
-      await axios.delete(`${API_ENDPOINT}/${expense.id}`);
-      const updatedExpenses = expenses.filter((e) => e.id !== expense.id);
+      await api.delete(`/expenses/${expense._id}`); // Use the api instance
+      const updatedExpenses = expenses.filter((e) => e._id !== expense._id);
       setExpenses(updatedExpenses);
     } catch (error) {
       setError('Error deleting expense. Please try again later.');
-      console.error(error);
+      console.error('Delete error:', error);
+      // Log error to logging service or analytics platform
     }
   };
+
+  if (isLoading) return <p className="loading">Loading...</p>;
+  if (error) return <p className="error-message">{error}</p>;
 
   return (
     <div>
       <h1>Expenses</h1>
-      {error && (
-        <p className="error-message" role="alert">
-          {error}
-          <button onClick={() => setError(null)}>Dismiss</button>
-        </p>
-      )}
       <ul>
         {expenses.map((expense) => (
-          <li key={expense.id}>
-            {expense.name} - ${expense.amount}
+          <li key={expense._id}>
+            {expense.name} - ${expense.amount.toFixed(2)}
             <button onClick={() => handleEditExpense(expense)}>Edit</button>
             <button onClick={() => handleDeleteExpense(expense)}>Delete</button>
           </li>

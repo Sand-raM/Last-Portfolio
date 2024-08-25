@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api'; // Import the custom Axios instance
 import '../Styles/Budget.css';
-
-const API_ENDPOINT = 'https://sandra-portfolio.onrender.com/budgets';
 
 const Budget = () => {
   const [budget, setBudget] = useState(0);
@@ -10,21 +8,25 @@ const Budget = () => {
   const [spent, setSpent] = useState(0);
   const [error, setError] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isLoading, setIsLoading] = useState(true); // Add a loading state variable
 
   useEffect(() => {
     fetchBudgetData();
   }, []);
 
   const fetchBudgetData = async () => {
+    setIsLoading(true); // Set loading to true
     try {
-      const response = await axios.get(API_ENDPOINT);
+      const response = await api.get('/budgets'); // Use the api instance
       setBudget(response.data.budget);
       setTarget(response.data.target);
       setSpent(response.data.spent);
     } catch (error) {
       setError('Error fetching budget data. Please try again later.');
-      console.error(error);
+      console.error('Fetch error:', error);
       // Log error to logging service or analytics platform
+    } finally {
+      setIsLoading(false); // Set loading to false
     }
   };
 
@@ -32,23 +34,26 @@ const Budget = () => {
     event.preventDefault();
     setIsUpdating(true);
     try {
-      const newTarget = parseFloat(event.target.target.value);
-      if (isNaN(newTarget) || newTarget <= 0) {
+      const updatedTargetAmount = parseFloat(event.target.target.value);
+      if (isNaN(updatedTargetAmount) || updatedTargetAmount <= 0) {
         setError('Please enter a valid and positive number.');
         setIsUpdating(false);
         return;
       }
-      await axios.put(API_ENDPOINT, { target: newTarget });
+      await api.put('/budgets', { target: updatedTargetAmount }); // Use the api instance
       fetchBudgetData(); // Refresh budget data after update
-      setTarget(newTarget); // Update local state with new target
+      setTarget(updatedTargetAmount); // Update local state with new target
     } catch (error) {
       setError('Error updating budget target. Please try again later.');
-      console.error(error);
+      console.error('Update error:', error);
       // Log error to logging service or analytics platform
     } finally {
       setIsUpdating(false);
     }
   };
+
+  if (isLoading) return <p className="loading">Loading...</p>;
+  if (error) return <p className="error-message">{error}</p>;
 
   return (
     <section className="budget">

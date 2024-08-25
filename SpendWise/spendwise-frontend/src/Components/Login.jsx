@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import '../Styles/Login.css';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,10 @@ const Login = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    axios.defaults.headers.common['Authorization'] = `Bearer ${localStorage.getItem('token')}`;
+  }, []);
 
   const validateInput = () => {
     if (!email || !password) {
@@ -28,7 +32,11 @@ const Login = () => {
       setError(null);
       navigate('/dashboard');
     } catch (error) {
-      setError('Login failed. Please check your credentials.');
+      if (error.response && error.response.status === 401) {
+        setError('Invalid email or password');
+      } else {
+        setError('An error occurred. Please try again later.');
+      }
     } finally {
       setIsLoading(false);
     }
