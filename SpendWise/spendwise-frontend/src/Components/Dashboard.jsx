@@ -15,27 +15,27 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const [userResponse, expenseResponse, budgetResponse] = await Promise.all([
-          api.get(ENDPOINTS.USER_ME),
-          api.get(ENDPOINTS.EXPENSES),
-          api.get(ENDPOINTS.BUDGETS),
-        ]);
-        setUserData(userResponse.data);
-        setExpenses(expenseResponse.data);
-        setBudgets(budgetResponse.data);
-      } catch (error) {
-        setError('Failed to fetch data. Please try again later.');
-        console.error('Fetch error:', error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
+  const fetchUserData = async () => {
+    setIsLoading(true);
+    try {
+      const [userResponse, expenseResponse, budgetResponse] = await Promise.all([
+        api.get(ENDPOINTS.USER_ME),
+        api.get(ENDPOINTS.EXPENSES),
+        api.get(ENDPOINTS.BUDGETS),
+      ]);
+      setUserData(userResponse.data);
+      setExpenses(expenseResponse.data);
+      setBudgets(budgetResponse.data);
+    } catch (error) {
+      setError('Failed to fetch data. Please try again later.');
+      console.error('Fetch error:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    fetchData();
+  useEffect(() => {
+    fetchUserData(); // Fetch data when component mounts
   }, []);
 
   if (isLoading) {
@@ -51,7 +51,7 @@ const Dashboard = () => {
     return (
       <div className="error-message">
         <p>{error}</p>
-        <button onClick={() => fetchData()}>Retry</button>
+        <button onClick={fetchUserData}>Retry</button>
       </div>
     );
   }
