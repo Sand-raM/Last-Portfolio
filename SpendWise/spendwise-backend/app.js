@@ -34,10 +34,10 @@ const routes = {
 };
 
 // Applying AuthMiddleware to routes that require authentication
-app.use('/budgets', authMiddleware, routes.budgets);
-app.use('/expenses', authMiddleware, routes.expenses);
-app.use('/users', authMiddleware, routes.users);
-app.use('/', routes.login);
+app.use('/api/budgets', authMiddleware, routes.budgets);
+app.use('/api/expenses', authMiddleware, routes.expenses);
+app.use('/api/users', authMiddleware, routes.users);
+app.use('/api', routes.login);
 
 // Custom root route
 app.get('/', (req, res) => {
