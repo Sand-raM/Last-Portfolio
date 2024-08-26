@@ -3,13 +3,15 @@ import api from '../api';
 import '../Styles/Dashboard.css';
 
 const ENDPOINTS = {
-  USER_ME: '/users/me',
-  EXPENSES: '/expenses',
+  USER_ME: '/api/users/me',
+  EXPENSES: '/api/expenses',
+  BUDGETS: '/api/budgets',
 };
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
   const [expenses, setExpenses] = useState([]);
+  const [budgets, setBudgets] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -18,8 +20,10 @@ const Dashboard = () => {
     try {
       const userResponse = await api.get(ENDPOINTS.USER_ME);
       const expenseResponse = await api.get(ENDPOINTS.EXPENSES);
+      const budgetResponse = await api.get(ENDPOINTS.BUDGETS);
       setUserData(userResponse.data);
       setExpenses(expenseResponse.data);
+      setBudgets(budgetResponse.data);
     } catch (error) {
       setError('Failed to fetch data. Please try again later.');
       console.error('Fetch error:', error);
@@ -73,6 +77,18 @@ const Dashboard = () => {
           ))}
         </ul>
         <button className="quick-add-btn" onClick={() => console.log('Add new expense!')}>Quick Add Expense</button>
+      </div>
+
+      <div className="section">
+        <h2>Your Budgets</h2>
+        <ul>
+          {budgets.map(budget => (
+            <li key={budget._id}>
+              {budget.name}: ${budget.amount.toFixed(2)} ({budget.category})
+            </li>
+          ))}
+        </ul>
+        <button className="quick-add-btn" onClick={() => console.log('Add new budget!')}>Quick Add Budget</button>
       </div>
 
       <div className="section">
