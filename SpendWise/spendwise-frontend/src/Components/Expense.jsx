@@ -17,7 +17,7 @@ const Expense = () => {
   const fetchExpenses = async () => {
     setIsLoading(true); // Set loading to true
     try {
-      const { data: expenseData } = await api.get('/expenses'); // Use the api instance
+      const { data: expenseData } = await api.get('/api/expenses');
       setExpenses(expenseData);
     } catch (error) {
       setError('Error fetching expenses. Please try again later.');
@@ -31,7 +31,7 @@ const Expense = () => {
   const handleAddExpense = async (event) => {
     event.preventDefault();
     try {
-      const { data: newExpenseData } = await api.post('/expenses', newExpense); // Use the api instance
+      const { data: newExpenseData } = await api.post('/api/expenses', newExpense);
       setExpenses([...expenses, newExpenseData]);
       setNewExpense({ name: '', amount: 0 });
     } catch (error) {
@@ -49,7 +49,7 @@ const Expense = () => {
   const handleUpdateExpense = async (event) => {
     event.preventDefault();
     try {
-      const { data: updatedExpenseData } = await api.put(`/expenses/${editedExpense._id}`, editedExpense); // Use the api instance
+      const { data: updatedExpenseData } = await api.put(`/api/expenses/${editedExpense._id}`, editedExpense);
       const updatedExpenses = expenses.map((expense) =>
         expense._id === editedExpense._id ? updatedExpenseData : expense
       );
@@ -65,7 +65,7 @@ const Expense = () => {
 
   const handleDeleteExpense = async (expense) => {
     try {
-      await api.delete(`/expenses/${expense._id}`); // Use the api instance
+      await api.delete(`/api/expenses/${expense._id}`);
       const updatedExpenses = expenses.filter((e) => e._id !== expense._id);
       setExpenses(updatedExpenses);
     } catch (error) {
