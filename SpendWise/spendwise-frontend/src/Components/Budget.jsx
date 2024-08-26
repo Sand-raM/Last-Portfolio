@@ -6,6 +6,7 @@ const Budget = () => {
   const [budget, setBudget] = useState(null);
   const [target, setTarget] = useState(null);
   const [spent, setSpent] = useState(null);
+  const [budgetId, setBudgetId] = useState(null); // Add a state for budget ID
   const [error, setError] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Add a loading state variable
@@ -18,13 +19,22 @@ const Budget = () => {
     setIsLoading(true); // Set loading to true
     try {
       const response = await api.get('/budgets'); // Use the api instance
-      setBudget(response.data.budget);
-      setTarget(response.data.target);
-      setSpent(response.data.spent);
+      const budgets = response.data; // Get the array of budgets
+      if (budgets.length > 0) {
+        const firstBudget = budgets[0]; // Get the first budget
+        setBudget(firstBudget.amount); // Set the budget amount
+        setTarget(firstBudget.target); // Set the target amount
+        setSpent(firstBudget.spent); // Set the spent amount
+        setBudgetId(firstBudget._id); // Set the budget ID
+      } else {
+        setBudget(null);
+        setTarget(null);
+        setSpent(null);
+        setBudgetId(null);
+      }
     } catch (error) {
       setError('Error fetching budget data. Please try again later.');
       console.error('Fetch error:', error);
-      // Log error to logging service or analytics platform
     } finally {
       setIsLoading(false); // Set loading to false
     }
@@ -40,30 +50,28 @@ const Budget = () => {
         setIsUpdating(false);
         return;
       }
-      await api.put('/budgets', { target: updatedTargetAmount }); // Use the api instance
+      await api.put(`/budgets/${budgetId}`, { target: updatedTargetAmount }); // Update the specific budget by ID
       fetchBudgetData(); // Refresh budget data after update
       setTarget(updatedTargetAmount); // Update local state with new target
     } catch (error) {
       setError('Error updating budget target. Please try again later.');
-      console.error('Update error:', error);                                  
-      // Log error to logging service or analytics platform
+      console.error('Update error:', error);
     } finally {
       setIsUpdating(false);
     }
   };
 
   if (isLoading) return <p className="loading">Loading...</p>;
-  if (error) return <p className="error-message">{error}</p>;
+  if (error) return (
+    <p className="error-message" role="alert">
+      {error}
+      <button onClick={() => setError(null)}>Dismiss</button>
+    </p>
+  );
 
   return (
     <section className="budget">
       <h1>Budget Management</h1>
-      {error && (
-        <p className="error-message" role="alert">
-          {error}
-          <button onClick={() => setError(null)}>Dismiss</button>
-        </p>
-      )}
       <article className="budget-info">
         <p>Current Budget: {budget === null ? 'Loading...' : `$${budget.toFixed(2)}`}</p>
         <p>Spent: {spent === null ? 'Loading...' : `$${spent.toFixed(2)}`}</p>
@@ -78,6 +86,7 @@ const Budget = () => {
             onChange={(e) => setTarget(parseFloat(e.target.value))}
             min="0" // Prevent negative values
             aria-label="New target amount"
+            required
           />
         </label>
         <button type="submit" disabled={isUpdating} aria-label="Update target">
