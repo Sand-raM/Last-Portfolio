@@ -24,7 +24,7 @@ const Dashboard = () => {
       setUserData(userResponse.data);
       setExpenses(expenseResponse.data);
       setBudgets(budgetResponse.data);
-    } catch (error) {
+  OOB  } catch (error) {
       setError('Failed to fetch data. Please try again later.');
       console.error('Fetch error:', error);
     } finally {
@@ -103,4 +103,5 @@ const Dashboard = () => {
   );
 };
 
+OB
 export default Dashboard;
