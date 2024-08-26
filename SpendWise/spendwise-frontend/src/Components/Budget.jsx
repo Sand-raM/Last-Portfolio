@@ -18,7 +18,7 @@ const Budget = () => {
   const fetchBudgetData = async () => {
     setIsLoading(true); // Set loading to true
     try {
-      const response = await api.get('/api/budgets');
+      const response = await api.get('/budgets'); // Use the api instance
       const budgets = response.data; // Get the array of budgets
       if (budgets.length > 0) {
         const firstBudget = budgets[0]; // Get the first budget
@@ -50,7 +50,7 @@ const Budget = () => {
         setIsUpdating(false);
         return;
       }
-      await api.put(`/api/budgets/${budgetId}`, { target: updatedTargetAmount });
+      await api.put(`/budgets/${budgetId}`, { target: updatedTargetAmount }); // Update the specific budget by ID
       fetchBudgetData(); // Refresh budget data after update
       setTarget(updatedTargetAmount); // Update local state with new target
     } catch (error) {
@@ -87,9 +87,10 @@ const Budget = () => {
             min="0" // Prevent negative values
             aria-label="New target amount"
             required
+            autoComplete="off" // Prevents autofill if not desired
           />
         </label>
-        <button type="submit" disabled={isUpdating} aria-label="Update target">
+        <button type="submit" disabled={isUpdating}>
           {isUpdating ? 'Updating...' : 'Update Target'}
         </button>
       </form>
