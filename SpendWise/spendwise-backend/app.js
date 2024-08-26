@@ -71,4 +71,4 @@ process.on('SIGINT', async () => {
   await mongoose.connection.close();
   console.log('Disconnected from MongoDB');
   process.exit(0);
-[I});
+});
