@@ -15,25 +15,27 @@ const Dashboard = () => {
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const fetchUserData = async () => {
-    setIsLoading(true);
-    try {
-      const userResponse = await api.get(ENDPOINTS.USER_ME);
-      const expenseResponse = await api.get(ENDPOINTS.EXPENSES);
-      const budgetResponse = await api.get(ENDPOINTS.BUDGETS);
-      setUserData(userResponse.data);
-      setExpenses(expenseResponse.data);
-      setBudgets(budgetResponse.data);
-  OOB  } catch (error) {
-      setError('Failed to fetch data. Please try again later.');
-      console.error('Fetch error:', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   useEffect(() => {
-    fetchUserData();
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const [userResponse, expenseResponse, budgetResponse] = await Promise.all([
+          api.get(ENDPOINTS.USER_ME),
+          api.get(ENDPOINTS.EXPENSES),
+          api.get(ENDPOINTS.BUDGETS),
+        ]);
+        setUserData(userResponse.data);
+        setExpenses(expenseResponse.data);
+        setBudgets(budgetResponse.data);
+      } catch (error) {
+        setError('Failed to fetch data. Please try again later.');
+        console.error('Fetch error:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   if (isLoading) {
@@ -49,7 +51,7 @@ const Dashboard = () => {
     return (
       <div className="error-message">
         <p>{error}</p>
-        <button onClick={fetchUserData}>Retry</button>
+        <button onClick={() => fetchData()}>Retry</button>
       </div>
     );
   }
@@ -59,7 +61,7 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <h1>Welcome, {userData?.name ?? 'Unknown'}</h1>
+      <h1>Welcome, {userData?.name || 'Unknown'}</h1>
 
       <div className="section">
         <h2>Summary of Expenses</h2>
@@ -93,15 +95,14 @@ const Dashboard = () => {
 
       <div className="section">
         <h2>Budget Overview</h2>
-        <p>Budget Name: {userData?.budgetName ?? 'N/A'}</p>
-        <p>Category: {userData?.budgetCategory ?? 'N/A'}</p>
-        <p>Amount: ${userData?.budgetAmount ?? '0.00'}</p>
-        <p>Start Date: {userData?.budgetStartDate ? new Date(userData?.budgetStartDate).toLocaleDateString() : 'N/A'}</p>
-        <p>End Date: {userData?.budgetEndDate ? new Date(userData?.budgetEndDate).toLocaleDateString() : 'N/A'}</p>
+        <p>Budget Name: {userData?.budgetName || 'N/A'}</p>
+        <p>Category: {userData?.budgetCategory || 'N/A'}</p>
+        <p>Amount: ${userData?.budgetAmount || '0.00'}</p>
+        <p>Start Date: {userData?.budgetStartDate ? new Date(userData.budgetStartDate).toLocaleDateString() : 'N/A'}</p>
+        <p>End Date: {userData?.budgetEndDate ? new Date(userData.budgetEndDate).toLocaleDateString() : 'N/A'}</p>
       </div>
     </div>
   );
 };
 
-OB
 export default Dashboard;
