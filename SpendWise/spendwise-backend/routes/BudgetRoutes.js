@@ -13,10 +13,10 @@ router.post('/', async (req, res) => {
   }
 });
 
-// Get all budgets
+// Get all budgets for a user
 router.get('/', async (req, res) => {
   try {
-    const budgets = await Budget.find();
+    const budgets = await Budget.find({ userId: req.user.id });
     res.json(budgets);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -58,6 +58,5 @@ router.delete('/:id', async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
-
 
 module.exports = router;
