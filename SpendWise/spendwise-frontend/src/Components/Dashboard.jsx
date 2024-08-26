@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import api from '../api'; // Import the custom Axios instance
-import '../Styles/Dashboard.css'; // Import from Styles
+import api from '../api';
+import '../Styles/Dashboard.css';
+
+const ENDPOINTS = {
+  USER_ME: '/users/me',
+  EXPENSES: '/expenses',
+};
 
 const Dashboard = () => {
   const [userData, setUserData] = useState(null);
@@ -10,32 +15,47 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchUserData = async () => {
-      setIsLoading(true); // Set loading to true
+      setIsLoading(true);
       try {
-        const userResponse = await api.get('/users/me'); // Use the api instance
-        const expenseResponse = await api.get('/expenses'); // Use the api instance
+        const userResponse = await api.get(ENDPOINTS.USER_ME);
+        const expenseResponse = await api.get(ENDPOINTS.EXPENSES);
         setUserData(userResponse.data);
         setExpenses(expenseResponse.data);
       } catch (error) {
-        setError('Failed to fetch data. Please check your credentials or try again later.'); // Make the error message more specific
+        setError('Failed to fetch data. Please try again later.');
         console.error('Fetch error:', error);
       } finally {
-        setIsLoading(false); // Set loading to false
+        setIsLoading(false);
       }
     };
 
     fetchUserData();
   }, []);
 
-  if (isLoading) return <p className="loading">Loading...</p>;
-  if (error) return <p className="error-message">{error}</p>;
+  if (isLoading) {
+    return (
+      <div className="loading">
+        <p>Loading...</p>
+        <span className="spinner" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="error-message">
+        <p>{error}</p>
+        <button onClick={() => fetchUserData()}>Retry</button>
+      </div>
+    );
+  }
 
   const totalExpenses = expenses.reduce((acc, expense) => acc + expense.amount, 0);
   const averageExpense = expenses.length > 0 ? totalExpenses / expenses.length : 0;
 
   return (
     <div className="dashboard">
-      <h1>Welcome, {userData?.name}</h1>
+      <h1>Welcome, {userData?.name ?? 'Unknown'}</h1>
 
       <div className="section">
         <h2>Summary of Expenses</h2>

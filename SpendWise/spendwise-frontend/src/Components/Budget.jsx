@@ -3,9 +3,9 @@ import api from '../api'; // Import the custom Axios instance
 import '../Styles/Budget.css';
 
 const Budget = () => {
-  const [budget, setBudget] = useState(0);
-  const [target, setTarget] = useState(0);
-  const [spent, setSpent] = useState(0);
+  const [budget, setBudget] = useState(null);
+  const [target, setTarget] = useState(null);
+  const [spent, setSpent] = useState(null);
   const [error, setError] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [isLoading, setIsLoading] = useState(true); // Add a loading state variable
@@ -45,7 +45,7 @@ const Budget = () => {
       setTarget(updatedTargetAmount); // Update local state with new target
     } catch (error) {
       setError('Error updating budget target. Please try again later.');
-      console.error('Update error:', error);
+      console.error('Update error:', error);                                  
       // Log error to logging service or analytics platform
     } finally {
       setIsUpdating(false);
@@ -65,16 +65,16 @@ const Budget = () => {
         </p>
       )}
       <article className="budget-info">
-        <p>Current Budget: ${budget.toFixed(2)}</p>
-        <p>Spent: ${spent.toFixed(2)}</p>
-        <p>Target: ${target.toFixed(2)}</p>
+        <p>Current Budget: {budget === null ? 'Loading...' : `$${budget.toFixed(2)}`}</p>
+        <p>Spent: {spent === null ? 'Loading...' : `$${spent.toFixed(2)}`}</p>
+        <p>Target: {target === null ? 'Loading...' : `$${target.toFixed(2)}`}</p>
       </article>
       <form onSubmit={handleUpdateBudget}>
         <label>
           Set New Target:
           <input
             type="number"
-            value={target}
+            value={target === null ? '' : target}
             onChange={(e) => setTarget(parseFloat(e.target.value))}
             min="0" // Prevent negative values
             aria-label="New target amount"
