@@ -37,7 +37,7 @@ const routes = {
 app.use('/api/budgets', authMiddleware, routes.budgets);
 app.use('/api/expenses', authMiddleware, routes.expenses);
 app.use('/api/users', authMiddleware, routes.users);
-app.use('/api', routes.login);
+app.use('/login', routes.login);
 
 // Custom root route
 app.get('/', (req, res) => {
@@ -56,6 +56,7 @@ app.get('/test', (req, res) => {
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err);
+
   res.status(500).json({ error: 'Internal Server Error' });
 });
 
