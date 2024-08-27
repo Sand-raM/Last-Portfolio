@@ -17,7 +17,7 @@ const Expense = () => {
   const fetchExpenses = async () => {
     setIsLoading(true); // Set loading to true
     try {
-      const { data: expenseData } = await api.get('/expenses'); // Use the api instance
+      const { data: expenseData } = await api.get('/api/expenses');
       setExpenses(expenseData);
     } catch (error) {
       setError('Error fetching expenses. Please try again later.');
@@ -30,7 +30,7 @@ const Expense = () => {
   const handleAddExpense = async (event) => {
     event.preventDefault();
     try {
-      const { data: newExpenseData } = await api.post('/expenses', newExpense); // Use the api instance
+      const { data: newExpenseData } = await api.post('/api/expenses', newExpense);
       setExpenses([...expenses, newExpenseData]);
       setNewExpense({ name: '', amount: 0 });
     } catch (error) {
@@ -47,7 +47,7 @@ const Expense = () => {
   const handleUpdateExpense = async (event) => {
     event.preventDefault();
     try {
-      const { data: updatedExpenseData } = await api.put(`/expenses/${editedExpense._id}`, editedExpense); // Use the api instance
+      const { data: updatedExpenseData } = await api.put(`/api/expenses/${editedExpense._id}`, editedExpense);
       const updatedExpenses = expenses.map((expense) =>
         expense._id === editedExpense._id ? updatedExpenseData : expense
       );
@@ -62,7 +62,7 @@ const Expense = () => {
 
   const handleDeleteExpense = async (expense) => {
     try {
-      await api.delete(`/expenses/${expense._id}`); // Use the api instance
+      await api.delete(`/api/expenses/${expense._id}`);
       const updatedExpenses = expenses.filter((e) => e._id !== expense._id);
       setExpenses(updatedExpenses);
     } catch (error) {
@@ -95,7 +95,7 @@ const Expense = () => {
               value={editedExpense.name}
               onChange={(event) => setEditedExpense({ ...editedExpense, name: event.target.value })}
               aria-label="Expense name"
-              autoComplete="off" // Prevents autofill for this field if not desired
+              autoComplete="off"
             />
           </label>
           <label>
@@ -106,7 +106,7 @@ const Expense = () => {
               onChange={(event) => setEditedExpense({ ...editedExpense, amount: parseFloat(event.target.value) })}
               min="0"
               aria-label="Expense amount"
-              autoComplete="off" // Prevents autofill for this field if not desired
+              autoComplete="off"
             />
           </label>
           <button type="submit">Update</button>
@@ -120,7 +120,7 @@ const Expense = () => {
               value={newExpense.name}
               onChange={(event) => setNewExpense({ ...newExpense, name: event.target.value })}
               aria-label="New expense name"
-              autoComplete="off" // Prevents autofill for this field if not desired
+              autoComplete="off"
             />
           </label>
           <label>
@@ -131,7 +131,7 @@ const Expense = () => {
               onChange={(event) => setNewExpense({ ...newExpense, amount: parseFloat(event.target.value) })}
               min="0"
               aria-label="New expense amount"
-              autoComplete="off" // Prevents autofill for this field if not desired
+              autoComplete="off"
             />
           </label>
           <button type="submit">Add</button>
